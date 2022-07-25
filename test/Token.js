@@ -11,7 +11,7 @@ describe('Token', () => {
 
     beforeEach(async () => {
         const Token = await ethers.getContractFactory('Token')
-        token = await Token.deploy('Dapp Coin', 'DAPP', 1000000)
+        token = await Token.deploy('Dapp Coin', 'DAPP', '1000000')
 
         accounts = await ethers.getSigners()
         deployer = accounts[0]
@@ -24,7 +24,6 @@ describe('Token', () => {
         const symbol = 'DAPP'
         const decimal = '18'
         const totalSupply = tokens("1000000")
-
 
         it('Has correct name.', async () => {
             expect(await token.name()).to.equal(name)
@@ -56,11 +55,9 @@ describe('Token', () => {
                 amount = tokens(100)
                 transaction = await token.connect(deployer).transfer(receiver.address, amount)
                 result = await transaction.wait()
-    
             })
     
             it('Transfers token balances.', async () => {
-    
                 expect(await token.balanceOf(deployer.address)).to.equal(tokens(999900))
                 expect(await token.balanceOf(receiver.address)).to.equal(amount)
             })
@@ -134,16 +131,33 @@ describe('Token', () => {
 
         describe('Success', () => {
             beforeEach(async () => {
-            transaction = await token.connect(exchange).transferFrom(deployer.address, receiver.address, amount)
-            result = await transaction.wait()
+                transaction = await token.connect(exchange).transferFrom(deployer.address, receiver.address, amount)
+                result = await transaction.wait()
         })
 
-        it('Transfers token balances.', async () => {
-            expect(await token.balanceOf(deployer.address)).to.equal(ethers.utils.parseUnits("999900", "ether"))
-            expect(await token.balanceOf(receiver.address)).to.equal(amount)
+            it('Transfers token balances.', async () => {
+                expect(await token.balanceOf(deployer.address)).to.equal(ethers.utils.parseUnits("999900", "ether"))
+                expect(await token.balanceOf(receiver.address)).to.equal(amount)
+            })
+
+            it('Resets the allowance', async () => {
+                expect(await token.allowance(deployer.address, exchange.address)).to.be.equal(0)
+            })
+
+            it('Emits a Transfer event.', async () => {
+                const event = result.events[0]
+                expect(event.event).to.equal('Transfer')
+
+                const args = event.args
+                expect(args.from).to.equal(deployer.address)
+                expect(args.to).to.equal(receiver.address)
+                expect(args.value).to.equal(amount)
+            })
         })
 
-        describe('Failure', () => {
+        describe('Failure', async () => {
+            const invalidAmount = tokens(1000000)
+            await expect(token.connect(exchange).transferFrom(deployer.address, receiver.address, invalidAmount)).to.be.reverted
         })
     })
 })
