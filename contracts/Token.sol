@@ -43,15 +43,23 @@ contract Token {
     {
 
         require(balanceOf[msg.sender] >= _value);
-        require(_to != address(0));
 
-        balanceOf[msg.sender] = balanceOf[msg.sender] - _value;
+        _transfer(msg.sender, _to, _value);
+
+        return true;
+    }
+
+    function _transfer(address _from, address _to, uint256 _value)
+    internal
+    {
+        require(_to != address(0));
+        balanceOf[_from] = balanceOf[_from] - _value;
         balanceOf[_to] = balanceOf[_to] + _value;
 
         emit Transfer(msg.sender, _to, _value);
 
-        return true;
     }
+    
 
     function approve(address _spender, uint256 _value)
         public 
@@ -67,6 +75,13 @@ contract Token {
         return true;
     }
 
-    // function transferFrom(address _from, address _to, uint256 _value)
+    function transferFrom(address _from, address _to, uint256 _value)
+    public
+    returns(bool success)
+    {
+
+        _transfer(_from, _to, _value);
+        return true;
+    }
 
 }

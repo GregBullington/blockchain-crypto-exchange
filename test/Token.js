@@ -1,7 +1,8 @@
 const {expect} = require('chai');
 const { ethers } = require('hardhat');
 
-const tokens = (n) => {
+const tokens = (n) => 
+{
     return ethers.utils.parseUnits(n.toString(), 'ether')
 }
 
@@ -122,4 +123,27 @@ describe('Token', () => {
 
     })
 
+    describe('Delegated token transfers', () => {
+        let amount, transaction, result
+
+        beforeEach(async () => {
+            amount = tokens(100)
+            transaction = await token.connect(deployer).approve(exchange.address, amount)
+            result = await transaction.wait()
+        })
+
+        describe('Success', () => {
+            beforeEach(async () => {
+            transaction = await token.connect(exchange).transferFrom(deployer.address, receiver.address, amount)
+            result = await transaction.wait()
+        })
+
+        it('Transfers token balances.', async () => {
+            expect(await token.balanceOf(deployer.address)).to.equal(ethers.utils.parseUnits("999900", "ether"))
+            expect(await token.balanceOf(receiver.address)).to.equal(amount)
+        })
+
+        describe('Failure', () => {
+        })
+    })
 })
