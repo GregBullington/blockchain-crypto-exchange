@@ -42,11 +42,7 @@ contract Exchange {
 
     }
 
-    function balanceOf(address _token, address _user)  
-        public
-        view
-        returns (uint256)
-    {
+    function balanceOf(address _token, address _user) public view returns (uint256) {
         return tokens[_token][_user];
     }
 
