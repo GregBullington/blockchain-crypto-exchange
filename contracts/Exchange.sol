@@ -15,6 +15,7 @@ contract Exchange {
     uint256 public orderCount;
     mapping(uint256 => bool) public orderCanceled;
 
+
     event Deposit(address token, address user, uint256 amount, uint256 balance);
     event Withdraw(address token, address user, uint256 amount, uint256 balance);
     event Order(uint256 id, address user, address tokenGet, uint256 amountGet, address tokenGive, uint256 amountGive, uint256 timestamp);
@@ -77,5 +78,32 @@ contract Exchange {
         orderCanceled[_id] = true;
 
         emit Cancel(_order.id, msg.sender, _order.tokenGet, _order.amountGet, _order.tokenGive, _order.amountGive, block.timestamp);
+    }
+
+    function fillOrder(uint256 _id) public {
+        _Order storage _order = orders[_id];
+        _trade(_order.id, _order.user, _order.tokenGet, _order.amountGet, _order.tokenGive, _order.amountGive);
+    }
+
+    function _trade(uint256 _orderId, address _user, address _tokenGet, uint256 _amountGet, address _tokenGive, uint256 _amountGive) 
+    internal 
+    {
+
+        uint256 _feeAmount = (_amountGet * feePercent) / 100;
+//msg.sender fills order - _user places order
+        tokens[_tokenGet][msg.sender] = 
+        tokens[_tokenGet][msg.sender] - (_amountGet + _feeAmount);
+
+        tokens[_tokenGet][_user] = 
+        tokens[_tokenGet][_user] + _amountGet;
+
+        tokens[_tokenGet][feeAccount] = 
+        tokens[_tokenGet][feeAccount] + _feeAmount;
+        
+        tokens[_tokenGive][_user] = 
+        tokens[_tokenGive][_user] - _amountGive;
+        
+        tokens[_tokenGive][msg.sender] = 
+        tokens[_tokenGive][msg.sender] + _amountGive;
     }
 }
