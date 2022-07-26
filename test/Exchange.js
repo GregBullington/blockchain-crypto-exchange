@@ -31,5 +31,20 @@ describe('Exchange', () => {
         })
     
     })
+
+    describe('Depositing Tokens', () => {
+
+        beforeEach(async () => {
+            
+        })
+
+        describe('Success', () => {
+
+        })
+
+        describe('Failure', () => {
+            
+        })
+    })
     
 })
