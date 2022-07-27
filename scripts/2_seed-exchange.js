@@ -1,3 +1,5 @@
+const config = require('../src/config.json')
+
 const tokens = (n) => {
     return ethers.utils.parseUnits(n.toString(), 'ether')
 }
@@ -12,18 +14,23 @@ async function main() {
     //Fetch accounts from wallet - these are unlocked.
     const accounts = await ethers.getSigners()
 
+    //Fetch network.
+    const { chainId } = await ethers.provider.getNetwork()
+    console.log("Using ChainId:", chainId)
+
+
     //Fetch deployed tokens.
-    const DAPP = await ethers.getContractAt('Token', '0x5FbDB2315678afecb367f032d93F642f64180aa3')
+    const DAPP = await ethers.getContractAt('Token', config[chainId].DAPP.address)
     console.log(`Token fetched: ${DAPP.address}`)
 
-    const eETH = await ethers.getContractAt('Token', '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512')
+    const eETH = await ethers.getContractAt('Token', config[chainId].eETH.address)
     console.log(`Token fetched: ${eETH.address}`)
 
-    const eDAI = await ethers.getContractAt('Token', '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0')
+    const eDAI = await ethers.getContractAt('Token', config[chainId].eDAI.address)
     console.log(`Token fetched: ${eDAI.address}`)
 
     //Fetch the deployed exchange.
-    const exchange = await ethers.getContractAt('Exchange', '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9')
+    const exchange = await ethers.getContractAt('Exchange', config[chainId].exchange.address)
     console.log(`Exchange fetched: ${exchange.address}`)
 
     //Give tokens to account[1].
