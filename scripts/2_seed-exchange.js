@@ -47,6 +47,8 @@ async function main() {
     console.log(`Approved ${amount} tokens from ${user1.address}`)
 
     //user1 deposits 10,000 DAPP.
+
+    //*Error popping up here:  TypeError: exchange.connect(...).depositToken is not a function
     transaction = await exchange.connect(user1).depositToken(DAPP.address, amount)
     await transaction.wait()
     console.log(`Deposited ${amount} Ether from ${user1.address}\n`)
