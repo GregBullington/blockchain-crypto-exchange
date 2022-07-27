@@ -23,7 +23,7 @@ async function main() {
     console.log(`Token fetched: ${eDAI.address}`)
 
     //Fetch the deployed exchange.
-    const exchange = await ethers.getContractAt('Token', '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9')
+    const exchange = await ethers.getContractAt('Exchange', '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9')
     console.log(`Exchange fetched: ${exchange.address}`)
 
     //Give tokens to account[1].
