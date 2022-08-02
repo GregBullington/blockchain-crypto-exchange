@@ -11,6 +11,8 @@ import {
 } 
   from '../store/interactions'
 
+  import Navbar from './Navbar';
+
 
 function App() {
   const dispatch = useDispatch()
@@ -44,7 +46,7 @@ function App() {
   return (
     <div>
 
-      {/* Navbar */}
+      <Navbar/>
 
       <main className='exchange grid'>
         <section className='exchange__section--left grid'>
