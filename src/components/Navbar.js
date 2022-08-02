@@ -1,5 +1,6 @@
-import logo from '../assets/logo.png'
+import logo from '../assets/XLogo.png'
 import { useSelector } from 'react-redux';
+import Blockies from 'react-blockies'
 
 const Navbar = () => {
     const account = useSelector(state => state.provider.account)
@@ -23,7 +24,18 @@ const Navbar = () => {
             )}
 
             { account ? (
-                <a> {account.slice(0, 5) + "..." + account.slice(38, 42)} </a>
+                <a> 
+                    {account.slice(0, 5) + "..." + account.slice(38, 42)} 
+                    <Blockies 
+                        account = { account }
+                        size = {10}
+                        scale = {3}
+                        color = "#2187D0"
+                        bgColor = "#F1F2F9"
+                        spotColor = "#767F92"
+                        className = "identicon"
+                    />
+                </a>
                 ) : (
                 <a></a>
             )}
