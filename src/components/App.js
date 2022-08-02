@@ -25,8 +25,10 @@ function App() {
     //Fetch current network chain ID (ex. hardhat: 31337, kovan: 42... )
     const chainId = await loadNetwork(provider, dispatch)
 
-    //Fetch current account and balance from Metamask
-    await loadAccount(provider, dispatch)
+    //Fetch current account and balance from Metamask when changed
+    window.ethereum.on('accountsChanged', () => {
+      loadAccount(provider, dispatch)
+    })
 
     //Load token smart contract
     const DAPP = config[chainId].DAPP
