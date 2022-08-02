@@ -25,6 +25,11 @@ function App() {
     //Fetch current network chain ID (ex. hardhat: 31337, kovan: 42... )
     const chainId = await loadNetwork(provider, dispatch)
 
+    //Reload page when network changes
+    window.ethereum.on('chainChanged', () => {
+      window.location.reload()
+    })
+
     //Fetch current account and balance from Metamask when changed
     window.ethereum.on('accountsChanged', () => {
       loadAccount(provider, dispatch)
