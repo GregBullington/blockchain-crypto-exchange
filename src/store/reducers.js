@@ -88,7 +88,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                     ...state,
                     balances: [action.balance]
                 }
-            case 'EXCHANGE_TOKEN_1_BALANCE_LOADED' :
+            case 'EXCHANGE_TOKEN_2_BALANCE_LOADED' :
                 return {
                     ...state,
                     balances: [...state.balances, action.balance]

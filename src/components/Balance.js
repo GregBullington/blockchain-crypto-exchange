@@ -38,7 +38,7 @@ const Balance = () => {
         if(exchange && tokens[0] && tokens[1] && account) {
             loadBalances(account, exchange, tokens, dispatch)
         }
-    }, [account, exchange, tokens, transferInProgress])
+    }, [account, exchange, tokens, transferInProgress, dispatch])
 
   return (
     <div className='component exchange__transfers'>
