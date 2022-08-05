@@ -102,3 +102,14 @@ export const transferTokens = async (provider, exchange, transferType, token, am
 
     await transaction.wait()
 }
+
+export const makeBuyOrder = async (provider, exchange, tokens, order, dispatch) => {
+    const tokenGet = tokens[0].address
+    const amountGet = order.amount.parseUnits(order.amount, 18)
+    const tokenGive = tokens[1].address
+    const amountGive = ethers.utils.parseUnits((order.amount * order.price).toString(), 18)
+
+    const signer = await provider.getSigner()
+    const transaction = await exchange.connect(signer).makeOrder(tokenGet, amountGet, tokenGive, amountGive)
+    await transaction.wait()
+}
