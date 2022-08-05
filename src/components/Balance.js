@@ -36,6 +36,10 @@ const Balance = () => {
         if(token.address === tokens[0].address) {
             transferTokens(provider, exchange, 'Deposit', token, token1TransferAmount, dispatch)
             setToken1TransferAmount(0)
+        } else {
+          transferTokens(provider, exchange, 'Deposit', token, token2TransferAmount, dispatch)
+          setToken2TransferAmount(0)
+
         }
     }
 
@@ -91,16 +95,17 @@ const Balance = () => {
             <p><small>Exchange</small><br/>{exchangeBalances && exchangeBalances[1]}</p>
         </div>
 
-        <form>
-          <label htmlFor="token1"></label>
+        <form onSubmit={(e) => depositHandler(e, tokens[1])} >
+          <label htmlFor="token1">{symbols && symbols[1]} Amount</label>
           <input 
           type="text" 
           id='token1' 
           placeholder='0.0000'
+          value={token2TransferAmount === 0 ? '' : token2TransferAmount} 
           onChange={(e) => amountHandler(e, tokens[1])} />
 
           <button className='button' type='submit'>
-            <span></span>
+            <span>Deposit</span>
           </button>
         </form>
       </div>
