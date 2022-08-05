@@ -1,10 +1,14 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import dapp from '../assets/dapp.svg'
+import eth from '../assets/eth.svg'
+
 import { loadBalances, transferTokens } from '../store/interactions';
 
 const Balance = () => {
     const [token1TransferAmount, setToken1TransferAmount] = useState(0) 
+    const [token2TransferAmount, setToken2TransferAmount] = useState(0) 
+
 
     const dispatch = useDispatch()
     
@@ -22,6 +26,8 @@ const Balance = () => {
     const amountHandler = (e, token) => {
         if(token.address === tokens[0].address) {
             setToken1TransferAmount(e.target.value)
+        } else {
+          setToken2TransferAmount(e.target.value)
         }
     }
 
@@ -80,12 +86,18 @@ const Balance = () => {
 
       <div className='exchange__transfers--form'>
         <div className='flex-between'>
-
+            <p><small>Token</small><br/><img src={eth} alt="Token Logo"/>{symbols && symbols[1]}</p>
+            <p><small>Wallet</small><br/>{tokenBalances && tokenBalances[1]}</p>
+            <p><small>Exchange</small><br/>{exchangeBalances && exchangeBalances[1]}</p>
         </div>
 
         <form>
           <label htmlFor="token1"></label>
-          <input type="text" id='token1' placeholder='0.0000'/>
+          <input 
+          type="text" 
+          id='token1' 
+          placeholder='0.0000'
+          onChange={(e) => amountHandler(e, tokens[1])} />
 
           <button className='button' type='submit'>
             <span></span>
