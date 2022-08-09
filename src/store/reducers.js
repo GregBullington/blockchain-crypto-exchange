@@ -176,6 +176,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
                     if(index === -1) {
                         data = [...state.allOrders.data, action.order]
                     } else {
+                        // eslint-disable-next-line
                         data = state.allOrders.data
                     }
 
