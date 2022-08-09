@@ -8,7 +8,8 @@ import {
   loadAccount, 
   loadTokens,
   loadExchange,
-  subscribeToEvents 
+  loadAllOrders,
+  subscribeToEvents
 } 
   from '../store/interactions'
 
@@ -52,6 +53,8 @@ function App() {
     //Load exchange smart contract
     const exchangeConfig = config[chainId].exchange
     const exchange = await loadExchange(provider, exchangeConfig.address, dispatch)
+
+    loadAllOrders(provider, exchange, dispatch)
 
     // Listen to events
     subscribeToEvents(exchange, dispatch)
