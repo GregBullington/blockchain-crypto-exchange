@@ -16,12 +16,12 @@ const filledOrders = state => get(state, 'exchange.filledOrders.data', [])
 const openOrders = state => {
   const all = allOrders(state)
   const filled = filledOrders(state)
-  const cancelled = cancelledOrders(state)
+  const canceled = cancelledOrders(state)
 
   const openOrders = reject(all, (order) => {
     const orderFilled = filled.some((o) => o.id.toString() === order.id.toString())
-    const orderCancelled = cancelled.some((o) => o.id.toString() === order.id.toString())
-    return(orderFilled || orderCancelled)
+    const orderCanceled = canceled.some((o) => o.id.toString() === order.id.toString())
+    return(orderFilled || orderCanceled)
   })
 
   return openOrders
