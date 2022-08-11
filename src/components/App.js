@@ -1,103 +1,92 @@
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux'
-import config from '../config.json' 
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import config from "../config.json";
 
-import { 
-  loadProvider, 
-  loadNetwork, 
-  loadAccount, 
+import {
+  loadProvider,
+  loadNetwork,
+  loadAccount,
   loadTokens,
   loadExchange,
   loadAllOrders,
-  subscribeToEvents
-} 
-  from '../store/interactions'
+  subscribeToEvents,
+} from "../store/interactions";
 
-  import Navbar from './Navbar';
-  import Markets from './Markets';
-  import Balance from './Balance';
-  import Order from './Order';
-  import PriceChart from './PriceChart';
-  import OrderBook from './OrderBook';
-
-
-
-
+import Navbar from "./Navbar";
+import Markets from "./Markets";
+import Balance from "./Balance";
+import Order from "./Order";
+import PriceChart from "./PriceChart";
+import OrderBook from "./OrderBook";
 
 function App() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const loadBlockchainData = async () => {
-
     //Connect ethers to blockchain
-    const provider = loadProvider(dispatch)
+    const provider = loadProvider(dispatch);
 
     //Fetch current network chain ID (ex. hardhat: 31337, kovan: 42... )
-    const chainId = await loadNetwork(provider, dispatch)
+    const chainId = await loadNetwork(provider, dispatch);
 
     //Reload page when network changes
-    window.ethereum.on('chainChanged', () => {
-      window.location.reload()
-    })
+    window.ethereum.on("chainChanged", () => {
+      window.location.reload();
+    });
 
     //Fetch current account and balance from Metamask when changed
-    window.ethereum.on('accountsChanged', () => {
-      loadAccount(provider, dispatch)
-    })
+    window.ethereum.on("accountsChanged", () => {
+      loadAccount(provider, dispatch);
+    });
 
     //Load token smart contract
-    const DAPP = config[chainId].DAPP
-    const eETH = config[chainId].eETH
+    const DAPP = config[chainId].DAPP;
+    const eETH = config[chainId].eETH;
 
-    await loadTokens(provider, [DAPP.address, eETH.address], dispatch)
+    await loadTokens(provider, [DAPP.address, eETH.address], dispatch);
 
     //Load exchange smart contract
-    const exchangeConfig = config[chainId].exchange
-    const exchange = await loadExchange(provider, exchangeConfig.address, dispatch)
+    const exchangeConfig = config[chainId].exchange;
+    const exchange = await loadExchange(
+      provider,
+      exchangeConfig.address,
+      dispatch
+    );
 
-    loadAllOrders(provider, exchange, dispatch)
+    loadAllOrders(provider, exchange, dispatch);
 
     // Listen to events
-    subscribeToEvents(exchange, dispatch)
-
-
-  }
+    subscribeToEvents(exchange, dispatch);
+  };
 
   useEffect(() => {
-    loadBlockchainData()
-  })
+    loadBlockchainData();
+  });
 
   return (
     <div>
+      <Navbar />
 
-      <Navbar/>
+      <main className="exchange grid">
+        <section className="exchange__section--left grid">
+          <Markets />
 
-      <main className='exchange grid'>
-        <section className='exchange__section--left grid'>
+          <Balance />
 
-          <Markets/>
-
-          <Balance/>
-
-          <Order/>
-
+          <Order />
         </section>
-        <section className='exchange__section--right grid'>
-
-          <PriceChart/>
+        <section className="exchange__section--right grid">
+          <PriceChart />
 
           {/* Transactions */}
 
           {/* Trades */}
 
-          <OrderBook/>
-
-
+          <OrderBook />
         </section>
       </main>
 
       {/* Alert */}
-
     </div>
   );
 }
