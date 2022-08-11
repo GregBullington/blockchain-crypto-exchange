@@ -66,6 +66,7 @@ const Navbar = () => {
         )}
 
         {account ? (
+          // eslint-disable-next-line
           <a
             href={
               config[chainId]
