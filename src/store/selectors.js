@@ -60,6 +60,43 @@ const decorateOrder = (order, tokens) => {
   };
 };
 
+// ALL FILLED ORDERS
+
+export const filledOrdersSelector = createSelector(
+  filledOrders,
+  tokens,
+  (orders, tokens) => {
+    if (!tokens[0] || !tokens[1]) {
+      return;
+    }
+
+    //Filter orders by selected tokens
+    orders = orders.filter(
+      (o) =>
+        o.tokenGet === tokens[0].address || o.tokenGet === tokens[1].address
+    );
+    orders = orders.filter(
+      (o) =>
+        o.tokenGive === tokens[0].address || o.tokenGive === tokens[1].address
+    );
+
+    orders - orders, sort((a, b) => a.timestamp - b.timestamp);
+
+    orders = decorateFilledOrders(orders, tokens);
+
+    console.log(orders);
+
+    return orders;
+  }
+);
+
+const decorateFilledOrders = (orders, tokens) => {
+  orders,
+    map((order) => {
+      //decorate each indi order
+    });
+};
+
 //ORDER BOOK
 
 export const orderBookSelector = createSelector(
