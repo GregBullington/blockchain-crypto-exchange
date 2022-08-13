@@ -80,21 +80,45 @@ export const filledOrdersSelector = createSelector(
         o.tokenGive === tokens[0].address || o.tokenGive === tokens[1].address
     );
 
-    orders - orders, sort((a, b) => a.timestamp - b.timestamp);
+    orders = orders.sort((a, b) => a.timestamp - b.timestamp);
 
     orders = decorateFilledOrders(orders, tokens);
 
-    console.log(orders);
+    orders = orders.sort((a, b) => b.timestamp - a.timestamp);
 
     return orders;
   }
 );
 
 const decorateFilledOrders = (orders, tokens) => {
-  orders,
-    map((order) => {
-      //decorate each indi order
-    });
+  // Track previous order to compare history
+  let previousOrder = orders[0];
+  return orders.map((order) => {
+    //decorate each individual order
+    order = decorateOrder(order, tokens);
+    order = decorateFilledOrder(order, previousOrder);
+    previousOrder = order;
+    return order;
+  });
+};
+
+const decorateFilledOrder = (order, previousOrder) => {
+  return {
+    ...order,
+    tokenPriceClass: tokenPriceClass(order.tokenPrice, order.id, previousOrder),
+  };
+};
+
+const tokenPriceClass = (tokenPrice, orderId, previousOrder) => {
+  if (previousOrder.id === orderId) {
+    return GREEN; // Success
+  }
+
+  if (previousOrder.tokenPrice <= tokenPrice) {
+    return GREEN; // Success
+  } else {
+    return RED; // Danger
+  }
 };
 
 //ORDER BOOK
