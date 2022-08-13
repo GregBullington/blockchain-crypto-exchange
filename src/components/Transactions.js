@@ -25,45 +25,22 @@ const Transactions = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
+            {myOpenOrders &&
+              myOpenOrders.map((order, index) => {
+                return (
+                  <tr key={index}>
+                    <td style={{ color: `${order.orderTypeClass}` }}>
+                      {order.token0Amount}
+                    </td>
+                    <td>{order.tokenPrice}</td>
+                    //TODO - Cancel Order will go in this final table div
+                    {/* <td></td> */}
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </div>
-
-      {/* <div> */}
-      {/* <div className='component__header flex-between'> */}
-      {/* <h2>My Transactions</h2> */}
-
-      {/* <div className='tabs'> */}
-      {/* <button className='tab tab--active'>Orders</button> */}
-      {/* <button className='tab'>Trades</button> */}
-      {/* </div> */}
-      {/* </div> */}
-
-      {/* <table> */}
-      {/* <thead> */}
-      {/* <tr> */}
-      {/* <th></th> */}
-      {/* <th></th> */}
-      {/* <th></th> */}
-      {/* </tr> */}
-      {/* </thead> */}
-      {/* <tbody> */}
-
-      {/* <tr> */}
-      {/* <td></td> */}
-      {/* <td></td> */}
-      {/* <td></td> */}
-      {/* </tr> */}
-
-      {/* </tbody> */}
-      {/* </table> */}
-
-      {/* </div> */}
     </div>
   );
 };

@@ -63,6 +63,8 @@ export const myOpenOrdersSelector = createSelector(
 
     // Sot orders by date descending
     orders = orders.sort((a, b) => b.timestamp - a.timestamp);
+
+    return orders;
   }
 );
 
