@@ -77,7 +77,9 @@ const Transactions = () => {
                           {order.token0Amount}
                         </td>
                         <td>{order.tokenPrice}</td>
-                        <td></td>
+                        <td>
+                          <button className="button--sm">Cancel</button>
+                        </td>
                       </tr>
                     );
                   })}
