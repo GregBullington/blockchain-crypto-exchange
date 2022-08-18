@@ -30,6 +30,10 @@ const Transactions = () => {
     }
   };
 
+  const cancelHandler = (order) => {
+    console.log("Canceled Order", order);
+  };
+
   return (
     <div className="component exchange__transactions">
       {showMyOrders ? (
@@ -78,7 +82,12 @@ const Transactions = () => {
                         </td>
                         <td>{order.tokenPrice}</td>
                         <td>
-                          <button className="button--sm">Cancel</button>
+                          <button
+                            className="button--sm"
+                            onClick={() => cancelHandler(order)}
+                          >
+                            Cancel
+                          </button>
                         </td>
                       </tr>
                     );
