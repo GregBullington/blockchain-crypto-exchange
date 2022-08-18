@@ -11,15 +11,15 @@ const tokens = (state) => get(state, "tokens.contracts");
 
 const allOrders = (state) => get(state, "exchange.allOrders.data", []);
 
-const cancelledOrders = (state) =>
-  get(state, "exchange.cancelledOrders.data", []);
+const canceledOrders = (state) =>
+  get(state, "exchange.canceledOrders.data", []);
 
 const filledOrders = (state) => get(state, "exchange.filledOrders.data", []);
 
 const openOrders = (state) => {
   const all = allOrders(state);
   const filled = filledOrders(state);
-  const canceled = cancelledOrders(state);
+  const canceled = canceledOrders(state);
 
   const openOrders = reject(all, (order) => {
     const orderFilled = filled.some(

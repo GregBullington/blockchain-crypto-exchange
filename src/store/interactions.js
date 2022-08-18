@@ -85,7 +85,7 @@ export const subscribeToEvents = (exchange, dispatch) => {
       amountGet,
       tokenGive,
       amountGive,
-      timeStamp,
+      timestamp,
       event
     ) => {
       const order = event.args;
@@ -127,9 +127,9 @@ export const loadAllOrders = async (provider, exchange, dispatch) => {
   // Fetch canceled orders
 
   const cancelStream = await exchange.queryFilter("Cancel", 0, block);
-  const cancelledOrders = cancelStream.map((event) => event.args);
+  const canceledOrders = cancelStream.map((event) => event.args);
 
-  dispatch({ type: "CANCELED_ORDERS_LOADED", cancelledOrders });
+  dispatch({ type: "CANCELED_ORDERS_LOADED", canceledOrders });
 
   // Fetch filled orders
 
@@ -218,8 +218,6 @@ export const makeBuyOrder = async (
   }
 };
 
-// ORDERS (BUY & SELL)
-
 export const makeSellOrder = async (
   provider,
   exchange,
@@ -247,6 +245,8 @@ export const makeSellOrder = async (
     dispatch({ type: "NEW_ORDER_FAIL" });
   }
 };
+
+// CANCEL ORDER
 
 export const cancelOrder = async (provider, exchange, order, dispatch) => {
   dispatch({ type: "ORDER_CANCEL_REQUEST" });
