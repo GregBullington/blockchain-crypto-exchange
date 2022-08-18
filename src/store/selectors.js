@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { get, groupBy, reject, maxBy, minBy, create } from "lodash";
+import { get, groupBy, reject, maxBy, minBy } from "lodash";
 import moment from "moment";
 import { ethers } from "ethers";
 
@@ -89,15 +89,15 @@ const decorateMyOpenOrder = (order, tokens) => {
 const decorateOrder = (order, tokens) => {
   let token0Amount, token1Amount;
 
-  // Note: DApp should be considered token0, mETH is considered token1
-  // Example: Giving mETH in exchange for DApp
+  // Note: DAPP should be considered token0, eETH is considered token1
+  // Example: Giving eETH in exchange for DAPP
 
   if (order.tokenGive === tokens[1].address) {
-    token0Amount = order.amountGive; // The amount of DApp we are giving
-    token1Amount = order.amountGet; // The amount of mETH we want...
+    token0Amount = order.amountGive; // The amount of DAPP we are giving
+    token1Amount = order.amountGet; // The amount of eETH we want...
   } else {
-    token0Amount = order.amountGet; // The amount of DApp we want
-    token1Amount = order.amountGive; // The amount of mETH we are giving...
+    token0Amount = order.amountGet; // The amount of DAPP we want
+    token1Amount = order.amountGive; // The amount of eETH we are giving...
   }
 
   // Calculates token price to 5 decimal places
@@ -174,6 +174,65 @@ const tokenPriceClass = (tokenPrice, orderId, previousOrder) => {
   } else {
     return RED; // Danger
   }
+};
+
+// MY FILLED ORDERS
+
+export const myFilledOrdersSelector = createSelector(
+  account,
+  tokens,
+  filledOrders,
+  (account, tokens, orders) => {
+    if (!tokens[0] || !tokens[1]) {
+      return;
+    }
+
+    // Find our orders
+    orders = orders.filter((o) => o.user === account || o.creator === account);
+    // Filter orders for current trading pair
+    orders = orders.filter(
+      (o) =>
+        o.tokenGet === tokens[0].address || o.tokenGet === tokens[1].address
+    );
+    orders = orders.filter(
+      (o) =>
+        o.tokenGive === tokens[0].address || o.tokenGive === tokens[1].address
+    );
+
+    // Sort by date descending
+    orders = orders.sort((a, b) => b.timestamp - a.timestamp);
+
+    // Decorate orders - add display attributes
+    orders = decorateMyFilledOrders(orders, account, tokens);
+
+    return orders;
+  }
+);
+
+const decorateMyFilledOrders = (orders, account, tokens) => {
+  return orders.map((order) => {
+    order = decorateOrder(order, tokens);
+    order = decorateMyFilledOrder(order, account, tokens);
+    return order;
+  });
+};
+
+const decorateMyFilledOrder = (order, account, tokens) => {
+  const myOrder = order.creator === account;
+
+  let orderType;
+  if (myOrder) {
+    orderType = order.tokenGive === tokens[1].address ? "buy" : "sell";
+  } else {
+    orderType = order.tokenGive === tokens[1].address ? "sell" : "buy";
+  }
+
+  return {
+    ...order,
+    orderType,
+    orderClass: orderType === "buy" ? GREEN : RED,
+    orderSign: orderType === "buy" ? "+" : "-",
+  };
 };
 
 //ORDER BOOK
