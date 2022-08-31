@@ -76,6 +76,12 @@ const DEFAULT_EXCHANGE_STATE = {
     loaded: false,
     data: [],
   },
+  canceledOrders: {
+    data: [],
+  },
+  filledOrders: {
+    data: [],
+  },
   events: [],
 };
 
