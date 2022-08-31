@@ -88,7 +88,7 @@ function App() {
         </section>
       </main>
 
-      {/* Alert */}
+      <Alert />
     </div>
   );
 }
