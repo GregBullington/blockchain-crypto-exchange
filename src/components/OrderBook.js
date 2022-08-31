@@ -14,7 +14,7 @@ const OrderBook = () => {
 
 
   const fillOrderHandler = (order) => {
-    fillOrder(provider,exchange, order, dispatch)
+    fillOrder(provider, exchange, order, dispatch)
   }
 
   return (

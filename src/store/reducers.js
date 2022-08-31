@@ -159,7 +159,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
 
 // Fill Orders
 
-      case 'ORDER_FILL_REQUEST':
+      case 'FILL_ORDER_REQUEST':
         return {
           ...state,
           transaction: {
@@ -168,7 +168,7 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
             isSuccessful: false
           }
         }
-        case "ORDER_FILL_SUCCESS": 
+        case "FILL_ORDER_SUCCESS": 
         index = state.filledOrders.data.findIndex(order => order.id.toString() === action.order.id.toString())
 
         if(index === -1) {

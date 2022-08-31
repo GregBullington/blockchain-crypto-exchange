@@ -68,23 +68,23 @@ export const subscribeToEvents = (exchange, dispatch) => {
     }
   );
 
-    exchange.on(
-      "Trade",
-      (
-        id,
-        user,
-        tokenGet,
-        amountGet,
-        tokenGive,
-        amountGive,
-        creator,
-        timestamp,
-        event
-      ) => {
-        const order = event.args;
-        dispatch({ type: "FILL_ORDER_SUCCESS", order, event });
-      }
-    );
+  exchange.on(
+    "Trade",
+    (
+      id,
+      user,
+      tokenGet,
+      amountGet,
+      tokenGive,
+      amountGive,
+      creator,
+      timestamp,
+      event
+    ) => {
+      const order = event.args;
+      dispatch({ type: "FILL_ORDER_SUCCESS", order, event });
+    }
+  );
 
   exchange.on("Deposit", (token, user, amount, balance, event) => {
     dispatch({ type: "TRANSFER_SUCCESS", event });
@@ -280,8 +280,8 @@ export const cancelOrder = async (provider, exchange, order, dispatch) => {
 
 // FILL ORDER
 
-export const fillOrder = async (provider,exchange, order, dispatch) => {
-  dispatch({ type: "FILL_ORDER_REQUEST"})
+export const fillOrder = async (provider, exchange, order, dispatch) => {
+  dispatch({ type: "FILL_ORDER_REQUEST" });
 
   try {
     const signer = await provider.getSigner();
@@ -290,4 +290,4 @@ export const fillOrder = async (provider,exchange, order, dispatch) => {
   } catch (error) {
     dispatch({ type: "FILL_ORDER_FAIL" });
   }
-}
+};
