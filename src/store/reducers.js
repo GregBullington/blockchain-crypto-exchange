@@ -113,6 +113,9 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
           data: action.allOrders,
         },
       };
+
+    // Cancel Order
+
     case "ORDER_CANCEL_REQUEST":
       return {
         ...state,
@@ -147,6 +150,54 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
           isError: true,
         },
       };
+
+// Fill Orders
+
+      case 'ORDER_FILL_REQUEST':
+        return {
+          ...state,
+          transaction: {
+            transactionType: "Fill Order",
+            isPending: true,
+            isSuccessful: false
+          }
+        }
+        case "ORDER_FILL_SUCCESS": 
+        index = state.filledOrders.data.findIndex(order => order.id.toString() === action.order.id.toString())
+
+        if(index === -1) {
+          data = [...state.filledOrders.data, action.order]
+        } else {
+          data = state.filledOrders.data
+        }
+
+        return {
+          ...state, 
+          transaction: {
+            transactionType: "Fill Order",
+            isPending: false,
+            isSuccessful: true
+          },
+          filledOrders: {
+            ...state.filledOrders,
+            data
+          },
+          events: [action.event, ...state.events]
+        }
+        case "FILL_ORDER_FAILED":
+          return {
+            ...state, 
+            transaction: {
+              transactionType: "Fill Order", 
+              isPending: false,
+              isSuccessful: false,
+              isError: true
+            }
+          }
+
+
+  // Token Transfers
+
     case "EXCHANGE_TOKEN_1_BALANCE_LOADED":
       return {
         ...state,
@@ -189,6 +240,9 @@ export const exchange = (state = DEFAULT_EXCHANGE_STATE, action) => {
         },
         transferInProgress: false,
       };
+
+
+      // Place Order
 
     case "NEW_ORDER_REQUEST":
       return {
